@@ -1,2 +1,94 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+from datetime import datetime #importa a biblioteca datetime
+
+# Solicita a senha para iniciar
+entrar = True
+while entrar:
+    senha = input("Digite a senha para iniciar: ")
+    if senha == "1234":
+        print("Acesso permitido!\n")
+        entrar = False #Se a senha for correta sai do loop
+    else:
+        print("Senha incorreta. Tente novamente.")
+        #Se a senha for errada, retorna ao loop
+
+pessoas = [] #Armazenar o dado das pessoas
+while True:
+    ano_nascimento = int(input("Digite o ano de nascimento (ou 0 para sair): "))
+    if ano_nascimento == 0:
+        break #Interrompe o projeto caso a resposta seja 0
+    sexo = input("Digite o sexo (M para masculino, F para feminino): ").strip().upper()
+    if sexo != "M" and sexo != "F":
+        print("Sexo inválido! Digite 'M' ou 'F'.")
+        continue #continua o loop caso o sexo seja errado para inserir novamente
+    pessoas.append((ano_nascimento, sexo)) #Coloca os dados inseridos na lista
+
+ano_atual = datetime.now().year #pega o ano atual para calcular a idade
+#zera os contadores das faixas etárias
+criancas_homens = 0
+criancas_mulheres = 0
+jovens_homens = 0
+jovens_mulheres = 0
+adultos_homens = 0
+adultos_mulheres = 0
+idosos_homens = 0
+idosos_mulheres = 0
+
+#zera os contadores totais de homens e mulheres
+total_homens = 0
+total_mulheres = 0
+
+total_pessoas = len(pessoas) #conta quantas pessoas totais tem na lista
+for ano_nascimento, sexo in pessoas:
+    # calcula a idade e adiciona +1 na varivel da faixa etária respectiva
+    idade = ano_atual - ano_nascimento
+    if idade >= 18 and idade <= 19:
+        if sexo == "M":
+            jovens_homens += 1
+        else:
+            jovens_mulheres += 1
+    if idade < 18:
+        if sexo == "M":
+            criancas_homens += 1
+        else:
+            criancas_mulheres += 1
+    elif idade >= 20 and idade <= 59:
+        if sexo == "M":
+            adultos_homens += 1
+        else:
+            adultos_mulheres += 1
+    elif idade >= 60:
+        if sexo == "M":
+            idosos_homens += 1
+        else:
+            idosos_mulheres += 1
+    #Conta o total de homens e mulheres
+    if sexo == "M":
+        total_homens += 1
+    else:
+        total_mulheres += 1
+
+if total_pessoas == 0:
+    print("Nenhum dado foi registrado.")
+else:
+    #Caclula a porcentagem de cada faixa etária
+    perc_jovens_homens = (jovens_homens / total_pessoas) * 100 if total_pessoas > 0 else 0 #if assegura que nãoo terá erros por divisão por 0
+    perc_jovens_mulheres = (jovens_mulheres / total_pessoas) * 100 if total_pessoas > 0 else 0
+    perc_adultos_homens = (adultos_homens / total_pessoas) * 100 if total_pessoas > 0 else 0
+    perc_adultos_mulheres = (adultos_mulheres / total_pessoas) * 100 if total_pessoas > 0 else 0
+    perc_idosos_homens = (idosos_homens / total_pessoas) * 100 if total_pessoas > 0 else 0
+    perc_idosos_mulheres = (idosos_mulheres / total_pessoas) * 100 if total_pessoas > 0 else 0
+    perc_criancas_homens = (criancas_homens / total_pessoas) * 100 if total_pessoas > 0 else 0
+    perc_criancas_mulheres = (criancas_mulheres / total_pessoas) * 100 if total_pessoas > 0 else 0
+
+    #imprime os resultados
+    print("Crianças: Menor de 18")
+    print("Jovens: Entre 18 e 19")
+    print("Adultos: Entre 20 e 59")
+    print("Idosos: 60 anos ou mais\n")
+
+    print("\nEstatísticas de Faixa Etária e Sexo:")
+
+    print(f'Crianças:{criancas_homens} homens ({perc_criancas_homens:.2f}%), {criancas_mulheres} mulheres ({perc_criancas_mulheres:.2f}%)')
+    print(f'Jovens: {jovens_homens} homens ({perc_jovens_homens:.2f}%), {jovens_mulheres} mulheres ({perc_jovens_mulheres:.2f}%)')
+    print(f'Adultos: {adultos_homens} homens ({perc_adultos_homens:.2f}%), {adultos_mulheres} mulheres ({perc_adultos_mulheres:.2f}%)')
+    print(f'Idosos: {idosos_homens} homens ({perc_idosos_homens:.2f}%), {idosos_mulheres} mulheres ({perc_idosos_mulheres:.2f}%)')
